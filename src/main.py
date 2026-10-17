@@ -1,17 +1,23 @@
 
-# F1 Data Tracker
+# ============================================================
+# F1 DATA TRACKER
 # Bootcamp II - Entrega Intermediária
 # Sistema de Gerenciamento e Análise de Dados da Fórmula 1
+# ============================================================
+
+from src.storage import carregar_dados, salvar_dados
 
 
-corridas = []
-pilotos = []
-equipes = []
-resultados = []
+# Carrega os dados existentes ao iniciar o programa.
+corridas, pilotos, equipes, resultados = carregar_dados()
 
+
+# ============================================================
+# FUNÇÕES DE ENTRADA E VALIDAÇÃO
+# ============================================================
 
 def ler_texto(mensagem):
-    """Solicita um texto não vazio."""
+    """Solicita um texto obrigatório."""
     while True:
         valor = input(mensagem).strip()
 
@@ -22,7 +28,7 @@ def ler_texto(mensagem):
 
 
 def ler_inteiro(mensagem, minimo=1):
-    """Solicita um número inteiro válido."""
+    """Solicita um número inteiro dentro do limite permitido."""
     while True:
         try:
             valor = int(input(mensagem))
@@ -31,6 +37,7 @@ def ler_inteiro(mensagem, minimo=1):
                 return valor
 
             print(f"Erro: informe um número igual ou maior que {minimo}.")
+
         except ValueError:
             print("Erro: digite um número inteiro válido.")
 
@@ -45,9 +52,14 @@ def ler_pontos():
                 return valor
 
             print("Erro: os pontos não podem ser negativos.")
+
         except ValueError:
             print("Erro: informe uma pontuação numérica válida.")
 
+
+# ============================================================
+# CADASTRO DE CORRIDAS
+# ============================================================
 
 def cadastrar_corrida():
     print("\n=== CADASTRAR CORRIDA ===")
@@ -59,23 +71,45 @@ def cadastrar_corrida():
         "temporada": ler_inteiro("Temporada (ano): ", 1950),
     }
 
+    if any(
+        item["nome"].casefold() == corrida["nome"].casefold()
+        and item["temporada"] == corrida["temporada"]
+        for item in corridas
+    ):
+        print("Erro: esta corrida já está cadastrada nesta temporada.")
+        return
+
     corridas.append(corrida)
+    salvar_dados(corridas, pilotos, equipes, resultados)
+
     print("Corrida cadastrada com sucesso!")
 
+
+# ============================================================
+# CADASTRO DE EQUIPES
+# ============================================================
 
 def cadastrar_equipe():
     print("\n=== CADASTRAR EQUIPE ===")
 
     nome = ler_texto("Nome da equipe: ")
 
-    if any(equipe["nome"].casefold() == nome.casefold()
-           for equipe in equipes):
+    if any(
+        equipe["nome"].casefold() == nome.casefold()
+        for equipe in equipes
+    ):
         print("Erro: esta equipe já está cadastrada.")
         return
 
     equipes.append({"nome": nome})
+    salvar_dados(corridas, pilotos, equipes, resultados)
+
     print("Equipe cadastrada com sucesso!")
 
+
+# ============================================================
+# CADASTRO DE PILOTOS
+# ============================================================
 
 def cadastrar_piloto():
     print("\n=== CADASTRAR PILOTO ===")
@@ -94,14 +128,24 @@ def cadastrar_piloto():
     listar_equipes()
 
     nome_equipe = ler_texto("Nome da equipe do piloto: ")
+
     equipe_encontrada = next(
-        (equipe for equipe in equipes
-         if equipe["nome"].casefold() == nome_equipe.casefold()),
-        None
+        (
+            equipe for equipe in equipes
+            if equipe["nome"].casefold() == nome_equipe.casefold()
+        ),
+        None,
     )
 
     if equipe_encontrada is None:
         print("Erro: equipe não encontrada. Cadastre-a primeiro.")
+        return
+
+    if any(
+        piloto["nome"].casefold() == nome.casefold()
+        for piloto in pilotos
+    ):
+        print("Erro: este piloto já está cadastrado.")
         return
 
     pilotos.append({
@@ -110,23 +154,35 @@ def cadastrar_piloto():
         "equipe": equipe_encontrada["nome"],
     })
 
+    salvar_dados(corridas, pilotos, equipes, resultados)
+
     print("Piloto cadastrado com sucesso!")
 
+
+# ============================================================
+# REGISTRO DE RESULTADOS
+# ============================================================
 
 def registrar_resultado():
     print("\n=== REGISTRAR RESULTADO ===")
 
-    if not corridas or not pilotos:
-        print("Cadastre pelo menos uma corrida e um piloto primeiro.")
+    if not corridas:
+        print("Cadastre pelo menos uma corrida primeiro.")
+        return
+
+    if not pilotos:
+        print("Cadastre pelo menos um piloto primeiro.")
         return
 
     listar_corridas()
     nome_corrida = ler_texto("Nome da corrida: ")
 
     corrida = next(
-        (item for item in corridas
-         if item["nome"].casefold() == nome_corrida.casefold()),
-        None
+        (
+            item for item in corridas
+            if item["nome"].casefold() == nome_corrida.casefold()
+        ),
+        None,
     )
 
     if corrida is None:
@@ -137,18 +193,22 @@ def registrar_resultado():
     nome_piloto = ler_texto("Nome do piloto: ")
 
     piloto = next(
-        (item for item in pilotos
-         if item["nome"].casefold() == nome_piloto.casefold()),
-        None
+        (
+            item for item in pilotos
+            if item["nome"].casefold() == nome_piloto.casefold()
+        ),
+        None,
     )
 
     if piloto is None:
         print("Erro: piloto não encontrado.")
         return
 
-    if any(resultado["corrida"] == corrida["nome"]
-           and resultado["piloto"] == piloto["nome"]
-           for resultado in resultados):
+    if any(
+        resultado["corrida"] == corrida["nome"]
+        and resultado["piloto"] == piloto["nome"]
+        for resultado in resultados
+    ):
         print("Erro: já existe um resultado deste piloto nesta corrida.")
         return
 
@@ -165,8 +225,14 @@ def registrar_resultado():
         "status": status,
     })
 
+    salvar_dados(corridas, pilotos, equipes, resultados)
+
     print("Resultado registrado com sucesso!")
 
+
+# ============================================================
+# CONSULTAS E LISTAGENS
+# ============================================================
 
 def listar_corridas():
     print("\n=== CORRIDAS CADASTRADAS ===")
@@ -177,8 +243,10 @@ def listar_corridas():
 
     for corrida in corridas:
         print(
-            f"- {corrida['nome']} | Circuito: {corrida['circuito']} | "
-            f"Data: {corrida['data']} | Temporada: {corrida['temporada']}"
+            f"- {corrida['nome']} | "
+            f"Circuito: {corrida['circuito']} | "
+            f"Data: {corrida['data']} | "
+            f"Temporada: {corrida['temporada']}"
         )
 
 
@@ -202,7 +270,8 @@ def listar_pilotos():
 
     for piloto in pilotos:
         print(
-            f"- {piloto['nome']} | Número: {piloto['numero']} | "
+            f"- {piloto['nome']} | "
+            f"Número: {piloto['numero']} | "
             f"Equipe: {piloto['equipe']}"
         )
 
@@ -220,8 +289,10 @@ def consultar_resultados():
 
     encontrados = [
         resultado for resultado in resultados
-        if not nome_corrida
-        or resultado["corrida"].casefold() == nome_corrida.casefold()
+        if (
+            not nome_corrida
+            or resultado["corrida"].casefold() == nome_corrida.casefold()
+        )
     ]
 
     if not encontrados:
@@ -239,6 +310,10 @@ def consultar_resultados():
         )
 
 
+# ============================================================
+# CLASSIFICAÇÕES
+# ============================================================
+
 def consultar_classificacao():
     print("\n=== CLASSIFICAÇÃO DOS PILOTOS ===")
 
@@ -250,12 +325,14 @@ def consultar_classificacao():
 
     for resultado in resultados:
         nome = resultado["piloto"]
-        pontuacoes[nome] = pontuacoes.get(nome, 0) + resultado["pontos"]
+        pontuacoes[nome] = (
+            pontuacoes.get(nome, 0) + resultado["pontos"]
+        )
 
     ordenados = sorted(
         pontuacoes.items(),
         key=lambda item: item[1],
-        reverse=True
+        reverse=True,
     )
 
     for posicao, (nome, pontos) in enumerate(ordenados, start=1):
@@ -280,17 +357,21 @@ def consultar_equipes():
     ordenadas = sorted(
         pontuacoes.items(),
         key=lambda item: item[1],
-        reverse=True
+        reverse=True,
     )
 
     for posicao, (nome, pontos) in enumerate(ordenadas, start=1):
         print(f"{posicao}º - {nome}: {pontos:g} pontos")
 
 
+# ============================================================
+# MENU PRINCIPAL
+# ============================================================
+
 def exibir_menu():
-    print("\n" + "=" * 38)
-    print("           F1 DATA TRACKER")
-    print("=" * 38)
+    print("\n" + "=" * 42)
+    print("             F1 DATA TRACKER")
+    print("=" * 42)
     print("1. Cadastrar corrida")
     print("2. Cadastrar piloto")
     print("3. Cadastrar equipe")
@@ -302,37 +383,56 @@ def exibir_menu():
     print("9. Listar pilotos")
     print("10. Listar equipes")
     print("0. Sair")
-    print("=" * 38)
+    print("=" * 42)
 
 
 def main():
+    print("F1 Data Tracker iniciado.")
+    print(f"Corridas carregadas: {len(corridas)}")
+    print(f"Pilotos carregados: {len(pilotos)}")
+    print(f"Equipes carregadas: {len(equipes)}")
+    print(f"Resultados carregados: {len(resultados)}")
+
     while True:
         exibir_menu()
         opcao = input("Escolha uma opção: ").strip()
 
         if opcao == "1":
             cadastrar_corrida()
+
         elif opcao == "2":
             cadastrar_piloto()
+
         elif opcao == "3":
             cadastrar_equipe()
+
         elif opcao == "4":
             registrar_resultado()
+
         elif opcao == "5":
             listar_corridas()
+
         elif opcao == "6":
             consultar_resultados()
+
         elif opcao == "7":
             consultar_classificacao()
+
         elif opcao == "8":
             consultar_equipes()
+
         elif opcao == "9":
             listar_pilotos()
+
         elif opcao == "10":
             listar_equipes()
+
         elif opcao == "0":
+            salvar_dados(corridas, pilotos, equipes, resultados)
+            print("Dados salvos com sucesso.")
             print("Encerrando o F1 Data Tracker. Até a próxima!")
             break
+
         else:
             print("Opção inválida. Escolha uma opção do menu.")
 

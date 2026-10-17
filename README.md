@@ -1,101 +1,76 @@
+# F1 Data Tracker 🏎️
 
-# F1 Data Tracker — Sistema de Gerenciamento e Análise de Dados da Fórmula 1
+Sistema de gerenciamento e análise de dados da Fórmula 1, desenvolvido em Python como projeto do Bootcamp II.
 
-## 1. Descrição do Projeto
+## 🎯 Objetivo
 
-O F1 Data Tracker é uma aplicação desenvolvida em Python para organizar e consultar informações relacionadas à Fórmula 1.
+Organizar informações de corridas, pilotos, equipes e resultados, permitindo consultar classificações e pontuações de forma simples por meio de um menu interativo no terminal.
 
-O projeto tem como objetivo facilitar o gerenciamento de dados de corridas, pilotos, equipes e resultados, permitindo acompanhar classificações e pontuações ao longo de uma temporada.
+## ⚙️ Funcionalidades
 
-Esta aplicação faz parte do Bootcamp II do curso de Engenharia de Dados e Machine Learning e dá continuidade ao planejamento desenvolvido na entrega inicial.
+- Cadastro de corridas, com nome, circuito, data e temporada.
+- Cadastro de equipes.
+- Cadastro de pilotos, com número e equipe.
+- Registro de resultados por corrida.
+- Consulta de corridas e resultados.
+- Classificação de pilotos por pontuação acumulada.
+- Classificação de equipes por pontuação acumulada.
+- Validação de campos obrigatórios e valores numéricos.
+- Persistência de dados em arquivo JSON, por meio do módulo de armazenamento.
 
-## 2. Objetivos
+## 🛠️ Tecnologias
 
-- Cadastrar corridas e seus dados principais.
-- Cadastrar pilotos e associá-los às respectivas equipes.
-- Cadastrar equipes participantes.
-- Registrar os resultados das corridas.
-- Consultar corridas e resultados cadastrados.
-- Calcular a classificação dos pilotos por pontuação.
-- Consultar a pontuação acumulada das equipes.
-- Aplicar validações para garantir a consistência dos dados.
+- Python 3
+- JSON para armazenamento local
+- Git e GitHub para versionamento do código
 
-## 3. Funcionalidades
-
-A aplicação contará com um menu interativo no terminal, permitindo ao usuário selecionar as operações disponíveis.
-
-As funcionalidades previstas são:
-
-1. Cadastrar corrida.
-2. Cadastrar piloto.
-3. Cadastrar equipe.
-4. Registrar resultado.
-5. Consultar corridas.
-6. Consultar resultados.
-7. Consultar classificação dos pilotos.
-8. Consultar pontuação das equipes.
-9. Sair da aplicação.
-
-## 4. Tecnologias Utilizadas
-
-- Python 3 — desenvolvimento da aplicação.
-- Git — controle de versão do código.
-- GitHub — hospedagem do repositório e acompanhamento do histórico de desenvolvimento.
-- Docker — tecnologia prevista para a etapa final do projeto.
-
-## 5. Estrutura do Projeto
+## 📁 Estrutura do projeto
 
 ```text
 F1-DATA-TRACKER/
-├── README.md
-├── .gitignore
+├── data/
+│   └── f1_data.json
 ├── docs/
 │   └── planejamento_logico.pdf
-└── src/
-    └── main.py
+├── src/
+│   ├── __init__.py
+│   ├── main.py
+│   └── storage.py
+├── .gitignore
+└── README.md
 ```
 
-## 6. Requisitos
+O arquivo `data/f1_data.json` é criado durante a execução quando os dados são salvos.
 
-- Python 3 instalado.
-- Git instalado para versionamento do projeto.
+## ▶️ Como executar
 
-## 7. Como Executar
-
-No terminal, acesse a pasta raiz do projeto e execute:
+1. Instale o Python 3.
+2. Clone o repositório ou abra a pasta do projeto.
+3. No terminal, entre na pasta raiz `F1-DATA-TRACKER`.
+4. Execute:
 
 ```bash
-python src/main.py
+py -m src.main
 ```
 
-No Windows, caso o comando `python` não funcione, tente:
+## 📊 Como utilizar
 
-```powershell
-py src/main.py
-```
+Ao iniciar, o sistema apresenta um menu interativo para cadastrar e consultar informações.
 
-## 8. Regras de Negócio
+Cadastre uma equipe antes de associá-la a um piloto. Cadastre uma corrida e um piloto antes de registrar um resultado. Os resultados registrados são utilizados para calcular as classificações.
 
-- Corridas devem possuir nome, circuito, data e temporada.
-- Pilotos devem possuir nome, número e equipe.
-- Pilotos devem estar associados a equipes cadastradas.
-- Resultados devem estar associados a corridas e pilotos existentes.
-- A pontuação deve ser numérica e válida.
-- A classificação dos pilotos deve considerar a soma dos pontos registrados.
-- A pontuação das equipes deve considerar os pontos obtidos por seus pilotos.
+## 💾 Armazenamento
 
-## 9. Desenvolvimento
+Os dados são armazenados localmente em `data/f1_data.json`, permitindo que sejam recuperados em execuções posteriores, desde que o salvamento tenha ocorrido corretamente.
 
-O projeto está sendo desenvolvido de maneira incremental:
+## 🔮 Próximas melhorias
 
-- **Fase 1 — Planejamento:** definição do problema, objetivos, funcionalidades, regras de negócio e arquitetura inicial.
-- **Fase 2 — Implementação:** desenvolvimento da aplicação em Python, validação das regras de negócio e versionamento com Git e GitHub.
-- **Fase 3 — Evolução:** preparação da aplicação para execução em Docker, realização de testes e deploy, conforme os requisitos da etapa final.
+- Aprimorar os testes automatizados.
+- Melhorar o tratamento de erros.
+- Validar formatos de data.
+- Desenvolver uma interface visual.
+- Avaliar a utilização de Docker em uma etapa futura.
 
-## 10. Autor
+## 👨‍💻 Projeto acadêmico
 
-João Coelho
-
-Curso: Engenharia de Dados e Machine Learning  
-Disciplina: Bootcamp II  
-Turma/Polo: B
+Desenvolvido para a entrega intermediária do Bootcamp II.

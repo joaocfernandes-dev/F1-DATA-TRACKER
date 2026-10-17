@@ -52,6 +52,25 @@ O arquivo `data/f1_data.json` é criado durante a execução quando os dados sã
 ```bash
 py -m src.main
 ```
+## 🧪 Testes automatizados
+
+O projeto utiliza a biblioteca `unittest`, incluída no Python, para verificar regras importantes do sistema.
+
+Os testes cobrem:
+
+- Cadastro de equipes.
+- Prevenção de equipes duplicadas.
+- Validação de campos obrigatórios.
+- Rejeição de pontuações negativas.
+- Ordenação da classificação de pilotos por pontuação.
+
+Para executar os testes na raiz do projeto, utilize:
+
+```bash
+py -m unittest src.test_main -v
+```
+
+Os testes utilizam entradas simuladas para verificar o comportamento das funções sem exigir interação manual com o menu.
 
 ## 📊 Como utilizar
 

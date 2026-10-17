@@ -81,5 +81,18 @@ class TestF1DataTracker(unittest.TestCase):
         )
 
 
+    def test_rejeitar_data_invalida(self):
+        with patch("builtins.input", side_effect=["31/02/2026", "15/03/2026"]):
+            resultado = main.ler_data("Data: ")
+
+        self.assertEqual(resultado, "15/03/2026")
+
+    def test_aceitar_data_valida(self):
+        with patch("builtins.input", side_effect=["15/03/2026"]):
+            resultado = main.ler_data("Data: ")
+
+        self.assertEqual(resultado, "15/03/2026")
+
+
 if __name__ == "__main__":
     unittest.main()

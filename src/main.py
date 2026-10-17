@@ -6,6 +6,7 @@
 # ============================================================
 
 from src.storage import carregar_dados, salvar_dados
+from datetime import datetime
 
 
 # Carrega os dados existentes ao iniciar o programa.
@@ -25,6 +26,21 @@ def ler_texto(mensagem):
             return valor
 
         print("Erro: este campo não pode ficar vazio.")
+
+
+def ler_data(mensagem):
+    """Solicita uma data válida no formato DD/MM/AAAA."""
+    while True:
+        valor = ler_texto(mensagem)
+
+        try:
+            data = datetime.strptime(valor, "%d/%m/%Y")
+            return data.strftime("%d/%m/%Y")
+        except ValueError:
+            print(
+                "Erro: data inválida. "
+                "Utilize o formato DD/MM/AAAA, por exemplo 15/03/2026."
+            )
 
 
 def ler_inteiro(mensagem, minimo=1):
@@ -67,8 +83,8 @@ def cadastrar_corrida():
     corrida = {
         "nome": ler_texto("Nome da corrida: "),
         "circuito": ler_texto("Circuito: "),
-        "data": ler_texto("Data da corrida: "),
-        "temporada": ler_inteiro("Temporada (ano): ", 1950),
+        "data": ler_data("Data da corrida (DD/MM/AAAA): "),
+"temporada": ler_inteiro("Temporada (ano): ", 1950),
     }
 
     if any(

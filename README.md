@@ -93,3 +93,54 @@ Os dados são armazenados localmente em `data/f1_data.json`, permitindo que seja
 ## 👨‍💻 Projeto acadêmico
 
 Desenvolvido para a entrega intermediária do Bootcamp II.
+
+## Execução com Docker
+
+O F1 Data Tracker pode ser executado em um contêiner Docker, facilitando sua inicialização em ambientes compatíveis.
+
+### Pré-requisitos
+- Docker Desktop instalado e em execução.
+- Git, caso deseje clonar o repositório.
+
+### Construir a imagem
+
+Na raiz do projeto, execute:
+
+```powershell
+docker build -t f1-data-tracker .
+```
+
+### Executar o sistema
+
+Para iniciar o sistema com persistência dos dados em uma pasta local:
+
+```powershell
+docker run -it --name f1-data-tracker-app -v "${PWD}/data:/app/data" f1-data-tracker
+```
+
+Os dados são armazenados em `data/f1_data.json`. O volume conecta essa pasta local ao diretório de dados do contêiner.
+
+### Testes automatizados
+
+Para executar os testes com Python no ambiente local:
+
+```powershell
+py -m unittest src.test_main -v
+```
+
+## Funcionalidades implementadas
+
+- Cadastro de corridas, pilotos e equipes.
+- Registro e consulta de resultados.
+- Classificação de pilotos e equipes.
+- Validação de entradas, incluindo datas e pontuação.
+- Persistência dos dados em arquivo JSON.
+- Testes automatizados com `unittest`.
+- Execução com Docker e volume para persistência dos dados.
+
+## Melhorias futuras
+
+- Aprimorar a interface de utilização.
+- Ampliar a cobertura dos testes.
+- Melhorar os relatórios e as estatísticas.
+- Avaliar a criação de uma interface web para visualização dos dados.

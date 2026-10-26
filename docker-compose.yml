@@ -1,0 +1,12 @@
+
+services:
+  tasktracker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: f1-data-tracker
+    container_name: f1-data-tracker-app
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./data:/app/data
